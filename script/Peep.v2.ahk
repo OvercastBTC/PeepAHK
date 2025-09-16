@@ -303,9 +303,9 @@ class Peep {
     ; Internal stuff
     ; ====================================
     static __New() {
-        props := Map()
-        props.CaseSense := 0
-        props.Set(
+        mProps := Map()
+        mProps.CaseSense := 0
+        mProps.Set(
             'Array',             ['Length', 'Capacity', 'Default'],
             'Buffer',            ['Ptr', 'Size'],
             'ClipboardAll',      ['Ptr', 'Size'],
@@ -336,7 +336,7 @@ class Peep {
             'MenuBar',           ['ClickCount', 'Default', 'Handle'],
             'RegExMatchInfo',    ['Pos', 'Len', 'Count', 'Mark']
         )
-        this.props := props
+        this.mProps := mProps
     }
 
     static btn_data := [
@@ -357,7 +357,8 @@ class Peep {
         }
     }
     
-    static is_enumerable(item) => item.HasMethod('__Enum') ? 1 : 0
+    ; static is_enumerable(item) => item.HasMethod('__Enum') ? 1 : 0
+    static is_enumerable(item) => item.HasMethod(item, '__Enum') ? 1 : 0
     reference_arr := Map()
     
     __New(items*) {
@@ -601,7 +602,8 @@ class Peep {
         header := '`n' ind '`;; OWN PROPERTIES (' typ ') `;;'
         str := ''
         ind2 := ind Peep.indent_str
-        if !item.HasMethod('OwnProps')
+        ; if !item.HasMethod('OwnProps')
+        if !item.HasMethod(item, 'OwnProps')
             return ''
         for key, value in item.OwnProps() {
             str .= '`n' ind
